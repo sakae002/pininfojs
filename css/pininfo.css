@@ -1,0 +1,42 @@
+.pin-info {
+    position: relative;
+    display: inline-block;
+    border-radius: 100%;
+    cursor: pointer;
+    z-index: 99;
+}
+
+.pin-info .trim-path-container {
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    cursor: default;
+}
+
+.pin-info .trim-path polyline {
+    stroke-dasharray: 120;
+    stroke-dashoffset: 120;
+    transition: 1s all ease;
+}
+
+.pin-info .trim-path-container.active .trim-path polyline {
+    stroke-dashoffset: 0;
+}
+
+.pin-info-message {
+    display: inline-block;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    margin: 0;
+    transform: translate(0, -50%);
+    opacity: 0;
+    transition: all 1s ease-out;
+    transition-delay: .5s;
+    width: 0;
+}
+
+.trim-path-container.active .pin-info-message {
+    opacity: 1;
+    width: 150px;
+}

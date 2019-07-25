@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="js/pininfo.js"></script>
+    <link href="css/pininfo.css" rel="stylesheet">
+    <title>Pininfo Example</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .flex-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100%;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="flex-box">
+        <!-- place me anywhere -->
+        <div class="text-center">
+            <div class="pin-info" id="myPin"></div>
+            <p>Click me!</p>
+        </div>
+    </div>
+    <script>
+        new PinInfo('myPin');
+    </script>
+</body>
+
+</html>
