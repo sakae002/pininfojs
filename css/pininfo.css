@@ -8,9 +8,62 @@
 
 .pin-info .trim-path-container {
     position: absolute;
-    left: 100%;
-    top: 50%;
     cursor: default;
+}
+
+.trim-path-container.path-r {
+    left: 100%;
+    bottom: 50%;
+    transform: translate(0px, 50%);
+}
+
+.trim-path-container.path-l {
+    right: 100%;
+    top: 50%;
+}
+
+.trim-path-container.path-l .trim-path {
+    transform: rotate(180deg) translateY(100%);
+}
+
+.trim-path-container.path-t {
+    top: 0;
+    left: 50%;
+
+}
+
+.trim-path-container.path-t .trim-path {
+    transform: rotate(-90deg);
+}
+
+.trim-path-container.path-b {}
+
+.pin-info-message {
+    display: inline-block;
+    position: absolute;
+    opacity: 0;
+    transition: all 1s ease-out;
+    transition-delay: .5s;
+    width: 0;
+}
+
+.trim-path-container.path-r .pin-info-message {
+    margin: 0;
+    transform: translate(0, -50%);
+}
+
+.trim-path-container.path-l .pin-info-message {
+    margin: 0;
+    transform: translate(0, -50%);
+}
+
+.trim-path-container.path-t .pin-info-message {}
+
+.trim-path-container.path-b .pin-info-message {}
+
+.trim-path-container.active .pin-info-message {
+    opacity: 1;
+    width: 150px;
 }
 
 .pin-info .trim-path polyline {
@@ -21,22 +74,4 @@
 
 .pin-info .trim-path-container.active .trim-path polyline {
     stroke-dashoffset: 0;
-}
-
-.pin-info-message {
-    display: inline-block;
-    position: absolute;
-    left: 100%;
-    top: 0;
-    margin: 0;
-    transform: translate(0, -50%);
-    opacity: 0;
-    transition: all 1s ease-out;
-    transition-delay: .5s;
-    width: 0;
-}
-
-.trim-path-container.active .pin-info-message {
-    opacity: 1;
-    width: 150px;
 }

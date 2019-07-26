@@ -11,6 +11,7 @@
     <style>
         body {
             margin: 0;
+            background: #343434;
         }
 
         .flex-box {
@@ -36,7 +37,8 @@
         </div>
     </div>
     <script>
-        new PinInfo('myPin');
+        var pin = new PinInfo('myPin', { message: 'Skrr skrrrrr!!!!!!!!!!!!!!!!!!!', direction: 'right', event: 'click'});
+        console.log(pin)
     </script>
 </body>
 
