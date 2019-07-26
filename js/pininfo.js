@@ -6,20 +6,24 @@
  * @version 1.0.0
  * 
  */
-const PRESET_POINTS = ['0,50 100,50', '0,50 10,50 90,100 100,100'];
+
+const PRESET_POINTS = {
+    l: ['100,50 0,50', '0,50 10,50 90,100 100,100'],
+    r: ['0,50 100,50', '100,100 90,100 10,50 0,50'],
+    t: ['50,100 50,0'],
+    b: ['50,0 50,100'],
+};
 const DEFAULT_OPTION = {
     pin_size: 20,
     pin_color: '#00cec9',
     message: 'Hallo Welt! こんにちは世界! Hello World! Привет мир!',
-    direction: 'left',
-    event: 'hover',
-    points: PRESET_POINTS[1],
+    direction: 'bottom',
+    event: 'click',
     svg: {
         viewbox_width: '100',
         viewbox_height: '100',
         line: {
             fill: 'none',
-            points: '',
             stroke: '#00cec9',
             stroke_witdh: '1',
             stroke_dasharray: '120',
@@ -35,20 +39,20 @@ class PinInfo {
 
     constructor(_id, _option) {
         this.id = _id;
-        if (!_option) {
-            this.option = DEFAULT_OPTION;
-        } else {
-            // prevent unset value
-            this.option = DEFAULT_OPTION;
-            this.setOption(_option);
-        }
+        this.setOption(_option);
         this.createPinInfo();
     }
 
     // init all needed value for creating object
     setOption(_option) {
+
+        this.option = DEFAULT_OPTION;
+
+        if (!_option) {
+            this.option.svg.line['points'] = _getPresetPointsByDirection(this.option.direction);
+        }
+
         if (typeof (_option) === 'object') {
-            var optionKeys = Object.keys(DEFAULT_OPTION);
             if (_option.hasOwnProperty('pin_size')) this.option['pin_size'] = _option.pin_size;
             if (_option.hasOwnProperty('pin_color')) this.option['pin_color'] = _option.pin_color;
             if (_option.hasOwnProperty('direction')) this.option['direction'] = _option.direction;
@@ -62,9 +66,7 @@ class PinInfo {
                     }
                 }
             }
-            // if (_option.hasOwnProperty('svg')){
-
-            // }
+            this.option.svg.line['points'] = _getPresetPointsByDirection(this.option.direction);
         }
     }
 
@@ -96,7 +98,9 @@ class PinInfo {
         let message = document.createElement('div');
         message.setAttribute('class', 'pin-info-message');
         message.innerText = this.option.message;
-        message.setAttribute('style', 'top: ' + this.getLastPoint().y+'px;left:' + this.getLastPoint().x+'px');
+        //TODO: Set message position for direction: t, l, b
+        // NOTE: this works fine with direction right
+        message.setAttribute('style', 'top: ' + this.getLastPoint().y + 'px;left:' + this.getLastPoint().x + 'px');
         // create svg viewbox
         let svg = document.createElementNS(NAMESPACE, 'svg');
         svg.setAttribute('class', 'trim-path');
@@ -104,7 +108,7 @@ class PinInfo {
         svg.setAttribute('width', this.option.svg.viewbox_width);
         // crate svg line
         let polyline = document.createElementNS(NAMESPACE, 'polyline');
-        polyline.setAttribute('points', this.option.points);
+        polyline.setAttribute('points', this.option.svg.line.points);
         polyline.setAttribute('stroke', this.option.svg.line.stroke);
         polyline.setAttribute('stroke-width', this.option.svg.line.stroke_witdh);
         polyline.setAttribute('fill', this.option.svg.line.fill);
@@ -115,7 +119,6 @@ class PinInfo {
         container.append(message);
         this.element.append(container);
     }
-
 
     createEvent() {
         // this > .trim-path-contianer > .trim-path
@@ -132,7 +135,7 @@ class PinInfo {
     }
 
     getLastPoint() {
-        var points = this.option.points.split(" ");
+        var points = this.option.svg.line.points.split(" ");
         var lastpoint = points[points.length - 1].split(",");
         return { x: lastpoint[0], y: lastpoint[1] }
     }
@@ -169,4 +172,30 @@ function _getDirectionClass(_d) {
             break;
     }
     return cn
+}
+
+/**
+ * @param {string} [_d] ('left'|'top'|'right'|'bottom') line direction
+ * @param {number} [_v=0] preset style
+ */
+function _getPresetPointsByDirection(_d = 'right', _v = 0) {
+    var p;
+    switch (_d) {
+        case 'left':
+            p = PRESET_POINTS.l[_v];
+            break;
+        case 'top':
+            p = PRESET_POINTS.t[_v];
+            break;
+        case 'right':
+            p = PRESET_POINTS.r[_v];
+            break;
+        case 'bottom':
+            p = PRESET_POINTS.b[_v];
+            break;
+        default:
+            break;
+    }
+    console.log(_d, p)
+    return p
 }
