@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="js/pininfo.js"></script>
+    <link href="css/animate.css" rel="stylesheet">
     <link href="css/pininfo.css" rel="stylesheet">
     <title>Pininfo Example</title>
     <style>
@@ -29,15 +30,33 @@
 </head>
 
 <body>
-    <div class="flex-box">
+    <div style="padding-top: 150px;">
         <!-- place me anywhere -->
         <div class="text-center">
-            <div class="pin-info" id="myPin"></div>
+            <div class="pin-info animated" id="myPin1"></div>
+            <p>Click me!</p>
+        </div>
+        <div class="text-center">
+            <div class="pin-info animated" id="myPin2"></div>
+            <p>Click me!</p>
+        </div>
+        <div class="text-center">
+            <div class="pin-info animated" id="myPin3"></div>
+            <p>Click me!</p>
+        </div>
+        <div class="text-center">
+            <div class="pin-info animated" id="myPin4"></div>
             <p>Click me!</p>
         </div>
     </div>
     <script>
-        var pin = new PinInfo('myPin', { direction: 'top'});
+        var option = {
+            direction: 'top',
+        };
+        var pin = new PinInfo('myPin1', {direction: 'top'});
+        var pin = new PinInfo('myPin2', {direction: 'left'});
+        var pin = new PinInfo('myPin3', {direction: 'right'});
+        var pin = new PinInfo('myPin4', {direction: 'bottom'});
     </script>
 </body>
 

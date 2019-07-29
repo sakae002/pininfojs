@@ -8,9 +8,9 @@
  */
 
 const PRESET_POINTS = {
-    l: ['100,50 0,50', '0,50 10,50 90,100 100,100'],
-    r: ['0,50 100,50', '100,100 90,100 10,50 0,50'],
-    t: ['50,100 50,0'],
+    l: ['100,50 0,50', '100,100 90,100 10,50 0,50'],
+    r: ['0,50 100,50', '0,50 10,50 90,100 100,100'],
+    t: ['50,100 50,75 25,75 25,50 75,50 75,25 75,0 100,0', '50,100 50,0' ],
     b: ['50,0 50,100'],
 };
 const DEFAULT_OPTION = {
@@ -95,12 +95,15 @@ class PinInfo {
         let container = document.createElement('div');
         let containerDirection = 'trim-path-container ' + _getDirectionClass(this.option.direction);
         container.setAttribute('class', containerDirection);
+
+        let messagecontainer = document.createElement('div');
+        messagecontainer.setAttribute('class', 'pin-info-message-container');
+        messagecontainer.setAttribute('style', 'top: ' + this.getLastPoint().y + 'px;left:' + this.getLastPoint().x + 'px');
         let message = document.createElement('div');
         message.setAttribute('class', 'pin-info-message');
         message.innerText = this.option.message;
-        //TODO: Set message position for direction: t, l, b
-        // NOTE: this works fine with direction right
-        message.setAttribute('style', 'top: ' + this.getLastPoint().y + 'px;left:' + this.getLastPoint().x + 'px');
+        messagecontainer.append(message);
+
         // create svg viewbox
         let svg = document.createElementNS(NAMESPACE, 'svg');
         svg.setAttribute('class', 'trim-path');
@@ -116,7 +119,7 @@ class PinInfo {
         svg.append(polyline);
         // append svg-element in container
         container.append(svg);
-        container.append(message);
+        container.append(messagecontainer);
         this.element.append(container);
     }
 
@@ -196,6 +199,6 @@ function _getPresetPointsByDirection(_d = 'right', _v = 0) {
         default:
             break;
     }
-    console.log(_d, p)
+    
     return p
 }

@@ -23,16 +23,39 @@
     transform: translate(0px, 50%);
 }
 
+.trim-path-container.path-l .pin-info-message {
+    top: 50%;
+    right: 100%;
+    transform: translateY(-50%);
+}
+
 .trim-path-container.path-t {
     bottom: 100%;
     right: 50%;
     transform: translateX(50%);
 }
 
+.trim-path-container.path-t .pin-info-message {
+    bottom: 100%;
+    left: 50%;
+    transform: translate(-50%);
+}
+
 .trim-path-container.path-b {
     top: 100%;
     right: 50%;
     transform: translateX(50%);
+}
+
+.trim-path-container.path-b .pin-info-message {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.pin-info-message-container {
+    position: absolute;
+    width: 1px;
+    height: 1px;
 }
 
 .pin-info-message {
