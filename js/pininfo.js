@@ -10,7 +10,7 @@
 const PRESET_POINTS = {
     l: ['100,50 0,50', '100,100 90,100 10,50 0,50'],
     r: ['0,50 100,50', '0,50 10,50 90,100 100,100'],
-    t: ['50,100 50,75 25,75 25,50 75,50 75,25 75,0 100,0', '50,100 50,0' ],
+    t: ['50,100 50,75 25,75 25,50 75,50 75,25 75,0 100,0', '50,100 50,0'],
     b: ['50,0 50,100'],
 };
 const DEFAULT_OPTION = {
@@ -20,19 +20,20 @@ const DEFAULT_OPTION = {
     direction: 'bottom',
     event: 'click',
     svg: {
-        viewbox_width: '100',
-        viewbox_height: '100',
+        viewbox_width: '800',
+        viewbox_height: '800',
         line: {
+            points: '',
             fill: 'none',
             stroke: '#00cec9',
-            stroke_witdh: '1',
+            stroke_witdh: '1.5',
             stroke_dasharray: '120',
             stroke_dashoffset: '120',
             stroke_opacity: '1',
         }
     },
     animation: {
-        animation_duration: '1',
+        animation_speed: '1000',
     }
 }
 class PinInfo {
@@ -60,13 +61,38 @@ class PinInfo {
             if (_option.hasOwnProperty('message')) this.option['message'] = _option.message;
             if (_option.hasOwnProperty('points')) this.option['points'] = _option.points;
             if (_option.hasOwnProperty('animation')) {
-                if (_option.animation.hasOwnProperty('animation_duration')) {
+                if (_option.animation.hasOwnProperty('animation_speed')) {
                     this.option['animation'] = {
-                        animation_duration: _option.animation.animation_duration
+                        animation_speed: _option.animation.animation_speed
                     }
                 }
             }
-            this.option.svg.line['points'] = _getPresetPointsByDirection(this.option.direction);
+            if (_option.hasOwnProperty('svg')) {
+                if (_option.svg.hasOwnProperty('line')) {
+                    if (_option.svg.line['points'] && _option.svg.line['points'] !== '') {
+                        this.option.svg.line['points'] = _option.svg.line['points'];
+
+                        var stringAr = this.option.svg.line['points'];
+                 
+                        stringAr = stringAr.replace(/[a-z]/mg, " ");
+                        stringAr = stringAr.replace(/[,]/gm, " ");
+                        stringAr = stringAr.split(" ");
+                        stringAr = stringArrayToNumberArray(stringAr);
+                        stringAr.shift();
+                        stringAr.shift();
+                        
+                        var maxValue = getPathMaxValue(stringAr);
+                        var toReplace = "m0,"+maxValue/2;
+                        console.log(this.option.svg.line['points'], toReplace)
+                        this.option.svg.line['points'].replace(/[^c]*/gm, "aaa");
+                        console.log(this.option.svg.line['points'])
+
+                    } else {
+                        this.option.svg.line['points'] = _getPresetPointsByDirection(this.option.direction);
+                    }
+                }
+            }
+
         }
     }
 
@@ -109,9 +135,10 @@ class PinInfo {
         svg.setAttribute('class', 'trim-path');
         svg.setAttribute('height', this.option.svg.viewbox_height);
         svg.setAttribute('width', this.option.svg.viewbox_width);
+
         // crate svg line
-        let polyline = document.createElementNS(NAMESPACE, 'polyline');
-        polyline.setAttribute('points', this.option.svg.line.points);
+        let polyline = document.createElementNS(NAMESPACE, 'path');
+        polyline.setAttribute('d', this.option.svg.line.points);
         polyline.setAttribute('stroke', this.option.svg.line.stroke);
         polyline.setAttribute('stroke-width', this.option.svg.line.stroke_witdh);
         polyline.setAttribute('fill', this.option.svg.line.fill);
@@ -121,6 +148,12 @@ class PinInfo {
         container.append(svg);
         container.append(messagecontainer);
         this.element.append(container);
+
+        var strokeArray = polyline.getTotalLength();
+        var strokeOffset = polyline.getTotalLength();
+        this.element.children[0].children[0].children[0].setAttribute('stroke-dasharray', strokeArray);
+        this.element.children[0].children[0].children[0].setAttribute('stroke-dashoffset', strokeOffset);
+        this.element.children[0].children[0].children[0].style.transitionDuration = (parseInt(this.option.animation.animation_speed) / 1000) + 's';
     }
 
     createEvent() {
@@ -135,6 +168,8 @@ class PinInfo {
         if (this.option.event === 'click') {
             this.element.addEventListener("click", function () { _toggleClassByElement(svg, 'active') });
         }
+
+
     }
 
     getLastPoint() {
@@ -199,6 +234,18 @@ function _getPresetPointsByDirection(_d = 'right', _v = 0) {
         default:
             break;
     }
-    
     return p
+}
+
+function stringArrayToNumberArray(arr) {
+    var newArr = [];
+    arr.forEach(element => {
+        if (element !== '')
+            newArr.push(parseFloat(element));
+    });
+    return newArr;
+}
+
+function getPathMaxValue(arr) {
+    return Math.max(...arr);
 }
