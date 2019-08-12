@@ -77,7 +77,6 @@
 .pin-info .trim-path path {
     transition-property: all;
     transition-timing-function: ease;
-    transition-delay: 0s;
 }
 
 .pin-info .trim-path-container.active .trim-path path {
